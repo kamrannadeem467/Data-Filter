@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Age</th>
+                            <th>Filter</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTable">
+                        <!-- User data will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <table border="1" style="min-width: 400px;">
+                    <thead>
+                        <tr>
+                            <th colspan="4" style="text-align: center;">Filter Data</th>
+                        </tr>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Age</th>
+                        </tr>
+                    </thead>
+                    <tbody id="filter">
+                        <!-- User data will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userTable = document.getElementById("userTable");
+        let myalldata;
+           async function apis(){
+            let response = await fetch("https://dummyjson.com/users");
+            let data = await response.json();
+            return data
+        }
+        apis().then(data =>{
+            myalldata = data.users
+            data.users.forEach(e => {
+               let mydata = `
+                <tr>
+                    <td>${e.id}</td>
+                    <td>${e.firstName}</td>
+                    <td>${e.email}</td>
+                    <td>${e.age}</td>
+                    <td><button onclick = "Filter(${e.id})">Click</button></td>
+                </tr>
+               ` 
+               userTable.innerHTML += mydata;
+            });
+        });
+        function Filter(id){
+            let filterData = myalldata.find((e)=> e.id === id);
+            let filter = document.getElementById("filter");
+            if(filterData){
+                let achi = `
+                <tr>
+                    <td>${filterData.id}</td>
+                    <td>${filterData.firstName}</td>
+                    <td>${filterData.email}</td>
+                    <td>${filterData.age}</td>
+                </tr>
+               `
+               filter.innerHTML += achi
+            }
+        }
+        
+        
+    </script>
+</body>
+</html>
